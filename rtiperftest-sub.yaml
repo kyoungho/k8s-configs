@@ -1,0 +1,21 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "rtiperftest-sub"
+  namespace: "default"
+  labels:
+    app: "rtiperftest-sub"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "rtiperftest-sub"
+  template:
+    metadata:
+      labels:
+        app: "rtiperftest-sub"
+    spec:
+      containers:
+      - name: "rtiperftest-sub"
+        image: "kyoungho/rti-perftest-sub"
