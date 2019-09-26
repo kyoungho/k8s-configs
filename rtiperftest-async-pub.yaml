@@ -1,0 +1,25 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "rtiperftest-pub"
+  namespace: "default"
+  labels:
+    app: "rtiperftest-pub"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "rtiperftest-pub"
+  template:
+    metadata:
+      labels:
+        app: "rtiperftest-pub"
+    spec:
+      containers:
+      - name: "rtiperftest-pub"
+        image: "kyoungho/rti-perftest-pub"
+        env: 
+        - name: perftest_args
+          value: "-asynchronous -qosFile perftest_async_qos_profiles.xml -dataLen 1000"
+       
