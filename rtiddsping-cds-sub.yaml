@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: "rtiddsping-sub"
-        image: "kyoungho/rtiddsping-sub"
+        image: "kyoungho/rtiddsping-sub:v0.1"
         env:
         - name: NDDS_DISCOVERY_PEERS
           value: rtps@rti-clouddiscoveryservice:7400
