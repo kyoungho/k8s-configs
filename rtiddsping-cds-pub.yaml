@@ -20,5 +20,5 @@ spec:
       - name: "rtiddsping-pub"
         image: "kyoungho/rtiddsping-pub"
         env:
-        - name: ARGS
-          value: "-peer rtps@rti-clouddiscoveryservice:7400"
+        - name: NDDS_DISCOVERY_PEERS
+          value: rtps@rti-clouddiscoveryservice:7400

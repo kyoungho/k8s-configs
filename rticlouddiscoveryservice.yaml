@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       run: rti-clouddiscoveryservice
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -21,8 +21,12 @@ spec:
         ports:
         - containerPort: 7400
           protocol: UDP
+        env:
+        - name: ARGS
+          value: "-verbosity 6"
       volumes:
         - name: license-volume
           configMap:
             name: rti-license
+
 
