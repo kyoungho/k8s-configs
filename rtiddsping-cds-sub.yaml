@@ -1,0 +1,24 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "rtiddsping-sub"
+  namespace: "default"
+  labels:
+    app: "rtiddsping-sub"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "rtiddsping-sub"
+  template:
+    metadata:
+      labels:
+        app: "rtiddsping-sub"
+    spec:
+      containers:
+      - name: "rtiddsping-sub"
+        image: "kyoungho/rtiddsping-sub"
+        env:
+        - name: ARGS
+          value: "-peer rtps@rti-clouddiscoveryservice:7400"
