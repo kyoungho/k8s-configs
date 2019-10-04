@@ -22,3 +22,5 @@ spec:
         env:
         - name: NDDS_DISCOVERY_PEERS
           value: rtps@rti-clouddiscoveryservice:7400
+      nodeSelector:
+        perftest: pub

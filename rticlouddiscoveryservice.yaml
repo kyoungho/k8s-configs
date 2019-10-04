@@ -28,5 +28,7 @@ spec:
         - name: license-volume
           configMap:
             name: rti-license
+      nodeSelector:
+        discovery: cds
 
 
