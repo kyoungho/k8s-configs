@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: clamav
+  labels:
+    k8s-app: clamav-host-scanner
+spec:
+  selector:
+    matchLabels:
+      name: clamav
+  template:
+    metadata:
+      labels:
+        name: clamav
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: clamav-scanner
+        image: kyoungho/clamav-dds:latest
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            cpu: 500m
+            memory: 3Gi
+        volumeMounts:
+        - name: data-vol
+          mountPath: /data
+        - name: host-fs
+          mountPath: /host-fs
+          readOnly: true
+        - name: logs
+          mountPath: /logs
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - name: data-vol
+        emptyDir: {}
+      - name: host-fs
+        hostPath:
+          path: /
+      - name: logs
+        hostPath:
+          path: /var/log/clamav

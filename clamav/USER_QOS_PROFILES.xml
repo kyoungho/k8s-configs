@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/6.0.1/rti_dds_profiles.xsd" version="6.0.1">
+    <types>
+      <module name="Common">
+        <module name="Limits">
+          <!--The maximum string length used to identify a UUID-->
+          <const name="GUID_STRING_MAX" type="uint16" value="20"/>
+          <!--The maximum string length used to identify a file or path-->
+          <const name="PATH_STRING_MAX" type="uint16" value="4096"/>
+          <!--The maximum length of the name of a file without its path-->
+          <const name="FILENAME_STRING_MAX" type="uint16" value="1024"/>
+          <!--The maximum string length used to identify a process name-->
+          <const name="PROCESS_STRING_MAX" type="uint32" value="256"/>
+          <!--The maximum string length used to identify a process ID-->
+          <const name="PID_STRING_MAX" type="uint16" value="20"/>
+          <!--The maximum length of a string used to store the hash of a file. Large enough to store a SHA256.-->
+          <const name="HASH_STRING_MAX" type="uint16" value="64"/>
+          <const name="EMAIL_STRING_MAX" type="uint16" value="1024"/>
+          <!--The maximum length of the user name-->
+          <const name="USER_STRING_MAX" type="uint16" value="40"/>
+          <!--The maximum length of an URL-->
+          <const name="URL_STRING_MAX" type="uint16" value="1024"/>
+          <!--The maximum length of the name of a vendor of a product-->
+          <const name="VENDOR_STRING_MAX" type="uint16" value="256"/>
+          <!--The maximum length of a string used to identify a path in the Windows registry-->
+          <const name="REGISTRY_STRING_MAX" type="uint16" value="1024"/>
+          <const name="HOST_STRING_MAX" type="uint16" value="100"/>
+          <!--The maximum length of a string to represent an IPv4 or IPv6. See https://stackoverflow.com/questions/166132/maximum-length-of-the-textual-representation-of-an-ipv6-address-->
+          <const name="IPADDRESS_STRING_MAX" type="uint16" value="45"/>
+          <const name="NTDOMAIN_STRING_MAX" type="uint16" value="100"/>
+          <const name="VIRUSNAME_STRING_MAX" type="uint16" value="50"/>
+          <const name="MESSAGE_STRING_MAX" type="uint16" value="1024"/>
+          <const name="VERSION_STRING_MAX" type="uint16" value="30"/>
+        </module>
+        <!--Identify a host in the system. At least one field must be defined-->
+        <struct name="HostIdentification" nested="true">
+          <!--Host identified as fully qualified name-->
+          <member name="host" type="string" stringMaxLength="Common::Limits::HOST_STRING_MAX" optional="true"/>
+          <!--IPv4 or IPv6-->
+          <member name="ip" type="string" stringMaxLength="Common::Limits::IPADDRESS_STRING_MAX" optional="true"/>
+        </struct>
+        <!--A generic timestamp, non dependent to a time zone or daylight savings-->
+        <struct name="UTCTimestamp" nested="true">
+          <!--Number of seconds since the Epoch-->
+          <member name="sec" type="uint32"/>
+          <member name="nanosec" type="uint32"/>
+        </struct>
+      </module>
+      <module name="CIM">
+        <module name="AntiVirus">
+          <!--The action taken by the AV after scanning a file as reported by the COM::AntiVirus::FileScan type-->
+          <enum name="ScanAction">
+            <!--File is not infected and allowed in the system-->
+            <enumerator name="Allowed" value="1" defaultLiteral="true"/>
+            <!--File Scan: the file is infected and has been deleted. For real-time scan: the given operation has been blocked-->
+            <enumerator name="Blocked" value="2"/>
+            <!--Applies to file scan: the file is infected and has been quarantined-->
+            <enumerator name="Deferred" value="3"/>
+            <!--An infection is reported, but no actions is taken at this time-->
+            <enumerator name="Ignored" value="4"/>
+            <!--Real-time scan only: process is invected and has been killed-->
+            <enumerator name="Killed" value="5"/>
+            <!--Generic error: i.e. file cannot be opened or I/O error. The message contains details about the error-->
+            <enumerator name="Error" value="6"/>
+          </enum>
+          <!--The possible action reported by the CIM::AntiVirus::Operation type-->
+          <enum name="OperationAction">
+            <!--On-demand scan task started-->
+            <enumerator name="ScanStarted" value="1"/>
+            <!--Scan completed normally-->
+            <enumerator name="ScanCompleted" value="2"/>
+            <!--Scan was interrupted before its normal completion-->
+            <enumerator name="ScanInterrupted" value="3"/>
+            <!--The AV engine is starting to update the virus definition database-->
+            <enumerator name="DatabaseUpdateStart" value="4"/>
+            <!--The AV engine updated its virus definition database successfully-->
+            <enumerator name="DatabaseUpdateSuccess" value="5"/>
+            <!--An error occurred while attempting to update the virus definition file-->
+            <enumerator name="DatabaseUpdateError" value="6"/>
+            <!--The real-time threat prevention service is started-->
+            <enumerator name="MonitoringStarted" value="7"/>
+            <!--The real-time threat prevention service is now stopped-->
+            <enumerator name="MonitoringStopped" value="8"/>
+          </enum>
+          <enum name="AVEventKind">
+            <enumerator name="OperationEvent" value="1"/>
+            <enumerator name="FileScanEvent" value="2"/>
+          </enum>
+          <struct name="AntiVirusBase" nested="true">
+            <!--The date of the malware event-->
+            <member name="date" type="nonBasic" nonBasicTypeName="Common::UTCTimestamp"/>
+            <!--The system that was affected by the malware event (not the host that detected it)-->
+            <member name="dest" type="nonBasic" nonBasicTypeName="Common::HostIdentification" optional="true"/>
+            <!--The system responsible of the scan event-->
+            <member name="scanhost" type="nonBasic" nonBasicTypeName="Common::HostIdentification" optional="true"/>
+            <!--The NT domain of the destination, if applicable-->
+            <member name="dest_nt_domain" type="string" stringMaxLength="Common::Limits::NTDOMAIN_STRING_MAX" optional="true"/>
+            <!--The user involved in the malware event-->
+            <member name="user" type="string" stringMaxLength="Common::Limits::USER_STRING_MAX" optional="true"/>
+            <!--The vendor and product name of the endpoint protection system, such as Symantec AntiVirus-->
+            <member name="vendor_product" type="string" stringMaxLength="Common::Limits::VENDOR_STRING_MAX" optional="true"/>
+            <member name="product_version" type="string" stringMaxLength="Common::Limits::VERSION_STRING_MAX" optional="true"/>
+            <!--The process ID that has the vulnerability reported-->
+            <member name="pid" type="uint64" optional="true"/>
+            <!--An optional message associated with the event. Can be used to report a status or error details-->
+            <member name="message" type="string" stringMaxLength="Common::Limits::MESSAGE_STRING_MAX" optional="true"/>
+          </struct>
+          <!--Identify an event associated with the scanning of an individual object in the destination system. You can use an instance of this type to report the scanning of an individual file or an email.-->
+          <struct name="FileScan" baseType="CIM::AntiVirus::AntiVirusBase" nested="true">
+            <!--The action taken by the reporting device-->
+            <member name="action" type="nonBasic" nonBasicTypeName="CIM::AntiVirus::ScanAction"/>
+            <!--The category of the malware, such as: keylogger, trojan, ad-supported, ransomware,,,-->
+            <member name="category" type="string" stringMaxLength="40" optional="true"/>
+            <!--The hash of the file with suspected malware-->
+            <member name="file_hash" type="string" stringMaxLength="Common::Limits::HASH_STRING_MAX" optional="true"/>
+            <!--The full file path of the file with suspected malware using path relative to the "dest" machine-->
+            <member name="file_path" type="string" stringMaxLength="Common::Limits::PATH_STRING_MAX" optional="true"/>
+            <!--The reported sender of an email-based attack-->
+            <member name="sender" type="string" stringMaxLength="Common::Limits::EMAIL_STRING_MAX" optional="true"/>
+            <!--The name of the malware infection detected on the client (the dest), such as Trojan.Vundo, Spyware.Gaobot, and W32.Nimbda-->
+            <member name="signature" type="string" stringMaxLength="Common::Limits::VIRUSNAME_STRING_MAX" optional="true"/>
+            <!--A URL containing more information about the vulnerability.	-->
+            <member name="url" type="string" stringMaxLength="Common::Limits::URL_STRING_MAX" optional="true"/>
+            <member name="process" type="string" stringMaxLength="Common::Limits::PROCESS_STRING_MAX" optional="true"/>
+          </struct>
+          <!--Use this type to represent information related to the lifecycle of an AV operation. For example, use it to report the start of the scan operation.-->
+          <struct name="Operation" baseType="CIM::AntiVirus::AntiVirusBase" nested="true">
+            <!--The action describing this operation-->
+            <member name="action" type="nonBasic" nonBasicTypeName="CIM::AntiVirus::OperationAction"/>
+            <!--The path to the virus definition database file or the unique identification of it (ex. database.table name)-->
+            <member name="database" type="string" stringMaxLength="Common::Limits::PATH_STRING_MAX" optional="true"/>
+            <!--The version of the virus database file-->
+            <member name="database_version" type="string" stringMaxLength="Common::Limits::VERSION_STRING_MAX" optional="true"/>
+            <!--The total number of virus definitions in database-->
+            <member name="database_threat_count" type="uint32" optional="true"/>
+            <member name="database_last_update" type="nonBasic" nonBasicTypeName="Common::UTCTimestamp" optional="true"/>
+          </struct>
+          <union name="Event">
+            <discriminator type="nonBasic" nonBasicTypeName="CIM::AntiVirus::AVEventKind"/>
+            <case>
+              <caseDiscriminator value="(OperationEvent)"/>
+              <member name="operation" type="nonBasic" nonBasicTypeName="CIM::AntiVirus::Operation"/>
+            </case>
+            <case>
+              <caseDiscriminator value="(FileScanEvent)"/>
+              <member name="scan" type="nonBasic" nonBasicTypeName="CIM::AntiVirus::FileScan"/>
+            </case>
+          </union>
+        </module>
+      </module>
+    </types>
+
+    <domain_library name="AntiVirusDomainLibrary">
+      <domain name="AntiVirusDomain" domain_id="0">
+        <register_type name="CIM_AV_Event" type_ref="CIM::AntiVirus::Event"/>
+        <topic name="AntiVirus" register_type_ref="CIM_AV_Event"/>
+      </domain>
+    </domain_library>
+
+    <domain_participant_library name="ClamScanParticipantLibrary">
+      <domain_participant name="ClamScanParticipant" domain_ref="AntiVirusDomainLibrary::AntiVirusDomain">
+        <publisher name="ClamScanPublisher">
+          <data_writer name="AntiVirusWriter" topic_ref="AntiVirus"/>
+        </publisher>
+      </domain_participant>
+    </domain_participant_library>
+
+</dds>
