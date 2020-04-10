@@ -21,4 +21,4 @@ spec:
         image: "kyoungho/rtiddsping-sub:6.0.0"
         env:
         - name: ARGS
-          value: "-domainId 10 -Verbosity 2"
+          value: "-domainId 10 -Verbosity 2 -index 1"
