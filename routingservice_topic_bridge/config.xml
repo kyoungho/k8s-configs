@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/6.0.1/6.0.0/rti_routing_service.xsd">
+
+    <!--
+    ********************************************************************** 
+    RTI Routing service example                                            
+    ********************************************************************** 
+    This example reads Ping from domain 10 and publish them as           
+    Circles on domain 11.                                                   
+    ********************************************************************** 
+    -->
+
+
+    <!-- 
+    This is the routing service configuration for this example
+    -->
+    <routing_service name="example">
+
+        <annotation>
+            <documentation>
+                Reads Ping on domain 10 and writes on domain 11
+            </documentation>
+        </annotation>
+
+        <domain_route name="DomainRoute" enabled="true">
+            <participant name="1">
+                <domain_id>10</domain_id>
+            </participant>
+            <participant name="2">
+                <domain_id>11</domain_id>
+            </participant>
+
+            <session name="Session" enabled="true">
+
+                <topic_route name="Ping">
+                    <input participant="1">
+                        <registered_type_name>PingType</registered_type_name>
+                        <topic_name>PingTopic</topic_name>
+                    </input>
+                    <output>
+                        <registered_type_name>PingType</registered_type_name>
+                        <topic_name>PingTopic</topic_name>
+                    </output>
+
+                </topic_route>
+
+            </session>
+        </domain_route>
+    </routing_service>
+
+</dds>

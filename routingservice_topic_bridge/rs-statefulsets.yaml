@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: topic-bridge
+spec:
+  selector:
+    matchLabels:
+      app: rti-routingservice # has to match .spec.template.metadata.labels
+  serviceName: "rti-routingservice"
+  replicas: 1 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: rti-routingservice # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: rti-routingservice
+        image: kyoungho/rti-routingservice
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config.xml
+          subPath: config.xml
+        env:
+        - name: CFG_NAME
+          value: "example"
+        - name: ARGS
+          value: "-verbosity 5"
+      imagePullSecrets:
+        - name: regcred
+      volumes: 
+        - name: config-volume
+          configMap:
+            name: rs-topic-bridge
