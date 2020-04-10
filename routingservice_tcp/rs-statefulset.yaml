@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rs-tcp
+spec:
+  selector:
+    matchLabels:
+      app: rti-routingservice # has to match .spec.template.metadata.labels
+  serviceName: "rti-routingservice"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rti-routingservice # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: rti-routingservice
+        image: kyoungho/rti-routingservice
+        ports:
+        - containerPort: 7400
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config.xml
+          subPath: config.xml
+        env:
+        - name: CFG_NAME
+          value: "RS-TCP"
+        - name: ARGS
+          value: "-verbosity 5"
+        - name: PUBLIC_ADDR # value for dds.transport.TCPv4.tcp1.public_address
+          value: "10.2.0.100:30007" 
+        - name: SERVER_PORT # has to match containerPort. value for dds.transport.TCPv4.tcp1.server_bind_port
+          value: "7400"
+        - name: WAN_DOMAIN # value for WAN domain ID
+          value: "100"
+        - name: LAN_DOMAIN # value for LAN domain ID
+          value: "10"
+      imagePullSecrets:
+        - name: regcred
+      volumes: 
+        - name: config-volume
+          configMap:
+            name: rs-tcp

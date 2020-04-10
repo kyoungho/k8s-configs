@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/6.0.0/rti_routing_service.xsd">
+  <qos_library name="TCP_WAN_Demo_lib">
+    <qos_profile name="TCP_WAN_Demo_profile">
+      <participant_qos>
+        <transport_builtin>
+          <!--<mask>UDPv4</mask>-->
+          <mask>MASK_NONE</mask>
+        </transport_builtin>
+        <property>
+          <value>
+            <element>
+              <name>dds.transport.load_plugins</name>
+              <value>dds.transport.TCPv4.tcp1</value>
+            </element>
+            <element>
+              <name>dds.transport.TCPv4.tcp1.library</name>
+              <value>nddstransporttcp</value>
+            </element>
+            <element>
+              <name>dds.transport.TCPv4.tcp1.create_function</name>
+              <value>NDDS_Transport_TCPv4_create</value>
+            </element>
+            <element>
+              <name>dds.transport.TCPv4.tcp1.parent.classid</name>
+              <value>
+                     NDDS_TRANSPORT_CLASSID_TCPV4_WAN
+              </value>
+            </element>
+            <element>
+              <name>dds.transport.TCPv4.tcp1.public_address</name>
+              <value>$(PUBLIC_ADDR)</value>
+            </element>
+            <element>
+              <name>dds.transport.TCPv4.tcp1.server_bind_port</name>
+              <value>$(SERVER_PORT)</value>
+            </element>
+            <element>
+              <name>dds.transport.TCPv4.tcp1.disable_nagle</name>
+              <value>1</value>
+            </element>
+          </value>
+        </property>
+      </participant_qos>
+    </qos_profile>
+  </qos_library>
+
+  <routing_service name="RS-TCP">
+    <domain_route name="TCPWAN_UDPLAN">
+      <participant name="1">
+        <domain_id>$(WAN_DOMAIN)</domain_id>
+        <participant_qos base_name="TCP_WAN_Demo_lib::TCP_WAN_Demo_profile"/>
+      </participant>
+      <participant name="2">
+        <domain_id>$(LAN_DOMAIN)</domain_id>
+      </participant>
+      <session name="Session">
+        <auto_topic_route name="Forward">
+          <publish_with_original_info>true</publish_with_original_info>
+          <input participant="1">
+            <deny_topic_name_filter>rti/*</deny_topic_name_filter>
+            <creation_mode>IMMEDIATE</creation_mode>
+          </input>
+          <output participant="2">
+            <deny_topic_name_filter>rti/*</deny_topic_name_filter>
+            <creation_mode>IMMEDIATE</creation_mode>
+          </output>
+        </auto_topic_route>
+        <auto_topic_route name="Backward">
+          <publish_with_original_info>true</publish_with_original_info>
+          <input participant="2">
+            <creation_mode>IMMEDIATE</creation_mode>
+            <deny_topic_name_filter>rti/*</deny_topic_name_filter>
+          </input>
+          <output>
+            <creation_mode>IMMEDIATE</creation_mode>
+            <deny_topic_name_filter>rti/*</deny_topic_name_filter>
+          </output>
+        </auto_topic_route>
+      </session>
+    </domain_route>
+  </routing_service>
+</dds>

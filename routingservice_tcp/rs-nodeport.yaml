@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-tcp
+spec:
+  type: NodePort
+  selector:
+    statefulset.kubernetes.io/pod-name: rs-tcp-0
+  ports:
+  - nodePort: 30007
+    protocol: TCP
+    port: 7400

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/6.0.1/6.0.0/rti_routing_service.xsd">
+
+    <routing_service name="RS-TCP-EXTERN">
+	 <domain_route name="TCPWAN_UDPLAN">
+            <participant name="1">
+                <domain_id>100</domain_id>
+		<participant_qos>
+		    <discovery>
+			    <initial_peers><element>tcpv4_wan://10.2.0.100:30007</element></initial_peers>
+		    </discovery>
+                    <transport_builtin>
+                        <mask>MASK_NONE</mask>
+                    </transport_builtin>
+                    <property>
+                        <value>
+                            <element>
+                                <name>dds.transport.load_plugins</name>
+                                <value>dds.transport.TCPv4.tcp1</value>
+                            </element>
+                            <element>
+                                <name>dds.transport.TCPv4.tcp1.library</name>
+                                <value>nddstransporttcp</value>
+                            </element>
+                            <element>
+                                <name>dds.transport.TCPv4.tcp1.create_function</name>
+                                <value>NDDS_Transport_TCPv4_create</value>
+                            </element>
+                            <element>
+                                <name>
+                                    dds.transport.TCPv4.tcp1.parent.classid
+                                </name>
+                                <value>
+                                    NDDS_TRANSPORT_CLASSID_TCPV4_WAN
+                                </value>
+                            </element>
+                            <element>
+                                <name>
+                                    dds.transport.TCPv4.tcp1.server_bind_port
+                                </name>
+                                <value>0</value>
+                            </element>
+                            <element>
+                                <name>
+                                    dds.transport.TCPv4.tcp1.disable_nagle
+                                </name>
+                                <value>1</value>
+                            </element>
+                        </value>
+                    </property>
+                </participant_qos>
+            </participant>
+
+            <participant name="2">
+                <domain_id>11</domain_id>
+            </participant>
+
+            <session name="Session">
+                <auto_topic_route name="AllForward">
+                    <publish_with_original_info>true</publish_with_original_info>                    
+                    <input participant="1">
+                        <creation_mode>IMMEDIATE</creation_mode>
+                        <deny_topic_name_filter>rti/*</deny_topic_name_filter>
+                    </input>
+                    <output>
+                        <creation_mode>IMMEDIATE</creation_mode>
+                        <deny_topic_name_filter>rti/*</deny_topic_name_filter>
+                    </output>
+                </auto_topic_route>
+
+                <auto_topic_route name="AllBackward">
+                    <publish_with_original_info>true</publish_with_original_info>
+                    <input participant="2">
+                        <creation_mode>IMMEDIATE</creation_mode>
+                        <deny_topic_name_filter>rti/*</deny_topic_name_filter>
+                    </input>
+                    <output>
+                        <creation_mode>IMMEDIATE</creation_mode>
+                        <deny_topic_name_filter>rti/*</deny_topic_name_filter>
+                    </output>
+                </auto_topic_route>
+            </session>
+
+        </domain_route>
+
+    </routing_service>
+
+</dds>
