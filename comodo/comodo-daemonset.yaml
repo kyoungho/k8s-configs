@@ -23,9 +23,15 @@ spec:
         - name: host-fs
           mountPath: /host-fs
           readOnly: true
+        - name: license-volume
+          mountPath: /app/rti_license.dat
+          subPath: rti_license.dat
       imagePullSecrets:
       - name: regcred
       volumes:
       - name: host-fs
         hostPath:
           path: /
+      - name: license-volume
+        configMap:
+          name: rti-license
