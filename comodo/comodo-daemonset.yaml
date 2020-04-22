@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: comodo
+  labels:
+    k8s-app: comodo-host-scanner
+spec:
+  selector:
+    matchLabels:
+      name: comodo
+  template:
+    metadata:
+      labels:
+        name: comodo
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: comodo-scanner
+        image: kyoungho/flb-dds:latest
+        volumeMounts:
+        - name: host-fs
+          mountPath: /host-fs
+          readOnly: true
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - name: host-fs
+        hostPath:
+          path: /
