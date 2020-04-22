@@ -4,3 +4,6 @@ $ kubectl create secret docker-registry regcred --docker-server=https://index.do
 Create ConfigMap for RTI license file
 $ kubectl create configmap rti-license --from-file rti_license.dat
 
+Deploy pods for Comodo and Fluent Bit
+$ kubectl create -f comodo-daemonset.yaml
+
