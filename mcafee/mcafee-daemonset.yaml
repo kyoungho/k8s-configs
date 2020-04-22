@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: mcafee
+  labels:
+    k8s-app: mcafee-host-scanner
+spec:
+  selector:
+    matchLabels:
+      name: mcafee
+  template:
+    metadata:
+      labels:
+        name: mcafee 
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: mcafee-scanner
+        image: kyoungho/flb-dds:latest
+        volumeMounts:
+        - name: host-fs
+          mountPath: /host-fs
+          readOnly: true
+        - name: license-volume
+          mountPath: /app/rti_license.dat
+          subPath: rti_license.dat
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - name: host-fs
+        hostPath:
+          path: /
+      - name: license-volume
+        configMap:
+          name: rti-license
