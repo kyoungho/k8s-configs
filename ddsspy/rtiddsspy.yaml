@@ -1,0 +1,26 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "rtiddsspy"
+  namespace: "default"
+  labels:
+    app: "rtiddsspy"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "rtiddsspy"
+  template:
+    metadata:
+      labels:
+        app: "rtiddsspy"
+    spec:
+      containers:
+      - name: "rtiddsspy"
+        image: "kyoungho/rtiddsspy"
+        env:
+        - name: ARGS
+          value: "-domainId 0 -printSample"
+      imagePullSecrets:
+        - name: regcred
