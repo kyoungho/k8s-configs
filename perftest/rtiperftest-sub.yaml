@@ -21,5 +21,5 @@ spec:
         image: "kyoungho/rti-perftest:v3.0.1"
         env:
           - name: "perftest_args"
-            value: "-pub"
+            value: "-sub"
 
