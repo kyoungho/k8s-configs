@@ -22,4 +22,6 @@ spec:
         env:
           - name: "perftest_args"
             value: "-sub"
+       nodeSelector:
+        perftest: sub
 
