@@ -43,4 +43,4 @@ spec:
   - port: 7400
     protocol: UDP
   selector:
-    run: rti-clouddiscoveryservice
+    discovery: cds
