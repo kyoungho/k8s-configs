@@ -22,3 +22,5 @@ spec:
         env:
         - name: NDDS_DISCOVERY_PEERS
           value: rtps@rti-clouddiscoveryservice:7400, builtin.shmem://, builtin.udpv4://127.0.0.1, builtin.udpv4://239.255.0.1
+      nodeSelector:
+        ping: sub
