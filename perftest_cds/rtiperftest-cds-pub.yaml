@@ -16,11 +16,14 @@ spec:
       labels:
         app: "rtiperftest-pub"
     spec:
+
       containers:
       - name: "rtiperftest-pub"
-        image: "kyoungho/rti-perftest-pub"
+        image: "kyoungho/rti-perftest:v3.0.1"
         env:
-        - name: NDDS_DISCOVERY_PEERS
-          value: rtps@rti-clouddiscoveryservice:7400, builtin.shmem://, builtin.udpv4://127.0.0.1, builtin.udpv4://239.255.0.1
+          - name: "perftest_args"
+            value: "-pub"
+          - name: NDDS_DISCOVERY_PEERS
+            value: rtps@rti-clouddiscoveryservice:7400, builtin.shmem://, builtin.udpv4://127.0.0.1, builtin.udpv4://239.255.0.1
       nodeSelector:
         perftest: pub
