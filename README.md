@@ -5,6 +5,7 @@ This directory includes examles of how to run DDS applications with Kubernetes.
 
 |Name | Description | Kubernetes Features Used |
 ------------- | ------------- | ------------  |
+|[DDS Spy](ddsspy/) | RTI DDS Spy | Deployment  |
 |[DDS Ping](ddsping/) | RTI DDS Ping | Deployment  |
 |[DDS Ping with CDS](ddsping_cds/) | RTI DDS Ping with CDS | Deployment, Service, ConfigMap |
 |[RTI Perftest](perftest/) | RTI Perftest | Deployment|
