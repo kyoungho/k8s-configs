@@ -1,4 +1,4 @@
-# k8s Configurations for RTI PerfTest
+# k8s Manifests for RTI PerfTest
 
 ## Attach labels to nodes
 `$ kubectl label nodes <node-name> perftest=pub`
