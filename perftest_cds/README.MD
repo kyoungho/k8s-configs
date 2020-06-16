@@ -1,18 +1,20 @@
-#### Create a ConfigMap for RTI License
+# k8s Configurations for RTI PerfTest with Cloud Discovery Service
+
+## Create a ConfigMap for RTI License
 `$ kubectl create configmap rti-license --from-file rti_license.dat`
 
-#### Attach labels to nodes
+## Attach labels to nodes
 `$ kubectl label nodes <node-name> discovery=cds`
 
 `$ kubectl label nodes <node-name> perftest=pub`
 
 `$ kubectl label nodes <node-name> perftest=sub`
 
-#### Create a Deployment and a Service for Cloud Discovery Service
+## Create a Deployment and a Service for Cloud Discovery Service
 `$ kubectl create -f rticlouddiscoveryservice.yaml`
 
-#### Create a Deployment for PerfTest publisher
+## Create a Deployment for PerfTest publisher
 `$ kubectl create -f rtiperftest-cds-pub.yaml`
 
-#### Create a Deployment for PerfTest subscriber
+## Create a Deployment for PerfTest subscriber
 `$ kubectl create -f rtiperftest-cds-sub.yaml`
