@@ -1,4 +1,4 @@
-# k8s Configurations for RTI PerfTest with Cloud Discovery Service
+# k8s Manifests for RTI PerfTest with Cloud Discovery Service
 
 ## Create a ConfigMap for RTI License
 `$ kubectl create configmap rti-license --from-file rti_license.dat`
