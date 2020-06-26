@@ -1,5 +1,5 @@
 # k8s-configs
-This directory includes examles of how to run DDS applications with Kubernetes. 
+This directory includes examles of how to run RTI Connext DDS applications with Kubernetes. 
 
 ### Examples
 
